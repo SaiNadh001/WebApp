@@ -3,8 +3,8 @@ var request = require('request');
 var bodyParser = require('body-parser');
 var app = express();
 var port = process.env.PORT || 9999;
-//var rest_url = "http://54.149.235.181:9000/v3/"
-var rest_url = "http://localhost:9000/v3/"
+var rest_url = "http://54.149.235.181:9000/v3/"
+//var rest_url = "http://localhost:9000/v3/"
 app.use(express.static('.'));
 app.use(express.static('./html'));
 
@@ -83,7 +83,16 @@ app.post('/auth/resendEmailVerification', function(req,res){
 });
 
 app.post('/auth/signIn', function(req,res){
+	console.log(req.body);
 	request.post({url:rest_url+'auth/signIn', json: req.body}, function (e, r, result) {
+      res.statusCode = r.statusCode;
+      res.send(result);
+    });
+});
+
+app.post('/auth/signUp', function(req,res){
+	console.log(req.body);
+	request.post({url:rest_url+'auth/signUp', json: req.body}, function (e, r, result) {
       res.statusCode = r.statusCode;
       res.send(result);
     });
@@ -96,9 +105,6 @@ app.post('/consents/signature', function(req,res){
       res.send(result);
     });
 });
-
-
-
 
 app.listen(port, function(){
 	console.log("App is running on "+ port);
