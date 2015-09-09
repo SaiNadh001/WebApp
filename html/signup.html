@@ -1,0 +1,114 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<title>Register</title>
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/custom.css">
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">BridgeWebApp</a>
+			</div>
+
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+				<!-- 	<li><a href="#">Sign Up</a></li> -->
+					<li><a href="/signin">Login</a></li>
+				</ul>
+				
+			</div>
+		</div>
+	</nav>
+	<div class="hide info">
+		<div class="alert alert-dismissible alert-info">
+		  <button type="button" class="close" data-dismiss="alert">×</button>
+		  <strong>Verify!<br></strong>An Email has been sent to your email address, please verify your account.
+		</div>
+	</div>
+	<div class="container jumbotron signup_form">
+		<form class="form-horizontal col-lg-8 col-md-8">
+			<fieldset>
+				<legend>Register New User</legend>
+
+				<div class="form-group">
+					<label for="inputUsername" class="col-lg-2 control-label">Username</label>
+					<div class="col-lg-10">
+						<input type="text" pattern="[A-Za-z]+" class="form-control" id="inputUsername" placeholder="Username">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputEmail" class="col-lg-2 control-label">Email</label>
+					<div class="col-lg-10">
+						<input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control" id="inputEmail" placeholder="Email">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPassword" class="col-lg-2 control-label">Password</label>
+					<div class="col-lg-10">
+						<input type="password" class="form-control" id="inputPassword" placeholder="Password">
+
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-lg-10 col-lg-offset-2">
+						<button type="reset" class="btn btn-default">Cancel</button>
+						<button type="button" class="btn btn-primary" onclick="signUp()">Sign Up</button>
+						<a href="#" class="right">Resend email verification</a>
+					</div>
+
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</body>
+<script type="text/javascript" src="../js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+<script type="text/javascript">
+function validateEmail(email) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(email);
+}
+// ajax_request("","POST","",getData)
+function ajax_request(url,type,data,callback){
+
+ $.ajax({
+ 	url: url, 
+ 	type:type,
+ 	data:data,
+ 	success: function(result){
+        callback(result)
+    }
+  });
+}
+function getData(data){
+	console.log(data)
+}
+
+function signUp(){
+	if(validateEmail($("#inputEmail").val()) &&  $("#inputUsername").val() !=="" &&  $("#inputPassword").val() !=="" ){
+		ajax_request("/auth/signUp","POST",{   
+		  "study":"doapi",   
+		  "username":$("#inputUsername").val(),    
+		  "email":$("#inputEmail").val(),    
+		  "password":$("#inputPassword").val()
+		},function(data){
+			console.log(data)
+			$(".signup_form").hide()
+			$(".info").removeClass("hide")
+		});
+	}
+	else{
+		console.log("Missing Fileds")
+	}
+}
+</script>
+</html>

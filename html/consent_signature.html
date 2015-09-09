@@ -1,0 +1,140 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<title>User Profile</title>
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/datepicker.css">
+	<link rel="stylesheet" type="text/css" href="../css/calender.css">
+	<style type="text/css">
+		.signature{
+			background-color: white;
+		}
+	</style>
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">BridgeWebApp</a>
+			</div>
+
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/consent_signature">Consent Signature</a></li>
+					<li><a href="/update_user_profile">Update Profile</a></li>
+					<li class="divider"></li>
+					<li><a href="/logout">Logout</a></li>
+				</ul>
+				
+			</div>
+		</div>
+	</nav>
+	<div class="container jumbotron ">
+		<form class="form-horizontal col-lg-8 col-md-8">
+			<fieldset>
+				<legend>Consent Signature</legend>
+
+				<div class="form-group">
+					<label for="inputUsername" class="col-lg-2 control-label">Name</label>
+					<div class="col-lg-10">
+						<input type="text" class="form-control" id="inputName" placeholder="Name">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputBirthDate" class="col-lg-2 control-label">Birth Date</label>
+					<div class="col-lg-10">
+		                    <input type='text' class="form-control" id='birthDate'  placeholder="Birth Date"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-2 control-label">Signature</label>
+					<div class="col-lg-10">
+						<div class="signature"> </div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputEmail" class="col-lg-2 control-label">Scope</label>
+					<div class="col-lg-10">
+						<select class="form-control" id="scope">
+				          <option value="no_sharing">no sharing</option>
+				          <option value="sponsors_and_partners">sponsors and partners</option>
+				          <option value="all_qualified_researchers">all qualified researchers</option>
+				        </select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-lg-10 col-lg-offset-2">
+						<button type="reset" class="btn btn-default">Cancel</button>
+						<button type="button" class="btn btn-primary" onclick="consentSignature()">Submit</button>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</body>
+<script type="text/javascript" src="../js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="../js/jSignature.min.js"></script>
+<script type="text/javascript">
+	$('#birthDate').datepicker({
+                    format: "yyyy-mm-dd",
+                    autoclose:true
+           }); 
+	$(".signature").empty().html("<div id='signature'></div>")
+	wdth=$(".signature").width()
+	$("#signature").jSignature({
+	    'background-color': '#000',
+	    'decor-color': 'transparent',
+	    height: 200 ,
+	    'background' :'white',
+	    width:wdth,
+		color: "#000",
+        lineWidth: 2
+    })
+    $("#signature img").remove()
+
+function ajax_request(url,type,data,callback){
+
+	 $.ajax({
+	 	url: url, 
+	 	type:type,
+	 	data:data,
+	 	beforeSend: function(xhr) {
+		    xhr.setRequestHeader("SessionToken", localStorage.getItem("sessionToken"));
+	    },
+	 	success: function(result){
+	        callback(result)
+	    }
+	  });
+}
+function getData(data){
+	console.log(data)
+}
+function consentSignature(){
+		ajax_request("/consents/signature","POST",{ 
+			"study":"doapi", 
+		    "name":$("#inputName").val(),
+		    "birthdate":$("#birthDate").val(),
+		    "imageData":$("#signature").jSignature("getData","default").replace("data:image/png;base64,",""),
+		    "imageMimeType":"image/png",
+		    "scope":$("#scope").val()
+		},function(data){
+			console.log(data)
+		});
+}
+
+ajax_request("/consents/signature","GET",{ "study":"doapi"},function(data){
+			console.log(data)
+		});
+
+</script>
+</html>
