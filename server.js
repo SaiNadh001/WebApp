@@ -8,6 +8,7 @@ var rest_url = "http://54.149.235.181:9000/v3/"
 app.use(express.static('.'));
 app.use(express.static('./html'));
 
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
