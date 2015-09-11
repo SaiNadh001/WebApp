@@ -3,6 +3,8 @@
 <head>
 	<title>LogIn</title>
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/ladda-themeless.min.css">
+
 </head>
 <body>
 	<nav class="navbar navbar-default">
@@ -48,7 +50,7 @@
 				<div class="form-group">
 					<div class="col-lg-10 col-lg-offset-2">
 						<button type="reset" class="btn btn-default">Cancel</button>
-						<button type="button" class="btn btn-primary" onclick="signIn()">Sign In</button>
+						<button  type="button" class="btn btn-primary ladda-button signin-btn" onclick="signIn()" data-style="slide-up"><span class="ladda-label">Sign In</span></button>
 					</div>
 				</div>
 			</fieldset>
@@ -57,17 +59,23 @@
 </body>
 <script type="text/javascript" src="../js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="../js/bootstrap.min.js"></script>
+<script src="../js/spin.min.js"></script>
+<script src="../js/ladda.min.js"></script>
 <script type="text/javascript">
 function ajax_request(url,type,data,callback){
-
- $.ajax({
- 	url: url, 
- 	type:type,
- 	data:data,
- 	success: function(result){
-        callback(result)
-    }
-  });
+	Ladda.create($(".signin-btn")[0]).start()
+ 	$.ajax({
+	 	url: url, 
+	 	type:type,
+	 	data:data,
+	 	success: function(result){
+	      	Ladda.create($(".signin-btn")[0]).stop()
+	        callback(result)
+	    },
+	    error:function(err){
+	    	Ladda.create($(".signin-btn")[0]).stop()
+	    }
+	  });
 }
 function getData(data){
 	console.log(data)
@@ -80,7 +88,6 @@ function signIn(){
 		  "username":$("#inputUsername").val(),    
 		  "password":$("#inputPassword").val()
 		},function(data){
-			
 			console.log(data)
 			localStorage.setItem("UserData", JSON.stringify(data))
 			localStorage.setItem("sessionToken", data.sessionToken)
