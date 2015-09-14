@@ -99,7 +99,8 @@ function signUp(){
 		  "study":"doapi",   
 		  "username":$("#inputUsername").val(),    
 		  "email":$("#inputEmail").val(),    
-		  "password":$("#inputPassword").val()
+		  "password":$("#inputPassword").val(),
+		  "roles":["admin","researcher","developer"]
 		},function(data){
 			console.log(data)
 			$(".signup_form").hide()
