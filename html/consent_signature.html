@@ -45,7 +45,22 @@
 			</div>
 		</div>
 	</nav>
+
+	
 	<div class="container jumbotron ">
+
+<div class="exists" style="display:none">
+		<div class="alert alert-dismissible alert-info">
+		  <button type="button" class="close" data-dismiss="alert">×</button>
+		  <strong>Hi <span class="username"></span>!<br></strong> You have already consented to this study
+		</div>
+		</div>
+		<div class="not_exists" style="display:none">
+		<div class="alert alert-dismissible alert-info">
+		  <button type="button" class="close" data-dismiss="alert">×</button>
+		  <strong>Hi <span class="username"></span>!<br></strong> you haven't consented yet, Please submit your consent to this study
+		</div>
+		</div>
 		<form class="form-horizontal col-lg-8 col-md-8">
 			<fieldset>
 				<legend>Consent Signature</legend>
@@ -141,9 +156,24 @@ function consentSignature(){
 		});
 }
 
-ajax_request("/consents/signature","GET",{ "study":"doapi"},function(data){
-			console.log(data)
-		});
+// ajax_request("/consents/signature","GET",{ "study":"doapi"},function(data){
+// 			console.log(data)
+// });
+
+
+
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	var s = JSON.parse(localStorage.getItem("UserData"))
+	if(s.consented == true){
+		$(".exists").show();
+	}
+	else{
+		$(".not_exists").show();
+	}
+});
 
 </script>
 </html>

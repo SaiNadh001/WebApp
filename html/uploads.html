@@ -1,0 +1,131 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<title>User Uploads</title>
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/datepicker.css">
+	<link rel="stylesheet" type="text/css" href="../css/calender.css">
+	<style type="text/css">
+		.signature{
+			background-color: white;
+		}
+	</style>
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">BridgeWebApp</a>
+			</div>
+
+		
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Study <span class="caret"></span></a>
+			          <ul class="dropdown-menu" role="menu">
+			            <li><a href="/study">Studies</a></li>
+			            <li><a href="/study_consent">Study Consents</a></li>
+			            <li class="divider"></li>
+			          </ul>
+			        </li>
+					<li class="active"><a href="/consent_signature">Consent Signature</a></li>
+					<li><a href="/update_user_profile">Update Profile</a></li>
+					<li class="divider"></li>
+					<li><a href="/logout">Logout</a></li>
+				</ul>
+				
+			</div>
+		</div>
+	</nav>
+
+	
+	<div class="container jumbotron ">
+	<h2>Uploads</h2>
+	Filename: <input type="text" class="form-control" name="country" value="uploads" readonly id="filename"/>
+	<br>
+	<button class="btn btn-primary" onclick="getUploadSession()">Get Uplaod session</button>
+	</div>
+</body>
+<script type="text/javascript" src="../js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap.min.js"></script>
+
+
+<script type="text/javascript">
+
+function ajax_request(url,type,data,callback){
+
+	 $.ajax({
+	 	url: url, 
+	 	type:type,
+	 	data:data,
+	 	beforeSend: function(xhr) {
+		    xhr.setRequestHeader("SessionToken", localStorage.getItem("sessionToken"));
+	    },
+	 	success: function(result){
+	        callback(result)
+	    }
+	  });
+}
+
+
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	if(localStorage.getItem("uploadSession")){
+		localStorage.removeItem("uploadSession");
+	}
+	if(localStorage.getItem("PreSignedUrl")){
+		localStorage.removeItem("PreSignedUrl");
+	}
+});
+
+function getUploadSession(){
+	var filename = $("#filename").val();
+	var upload_request_obj = {   
+						    "name":filename,
+						    "contentLength":1213,
+						    "contentMd5":"fFROLXJeXfzQvXYhJRKNfg==",
+						    "contentType":"application/zip"
+						 }
+	console.log(upload_request_obj);
+	ajax_request('/uploads',"POST",upload_request_obj, function(data){
+		console.log(data);
+		localStorage.setItem("uploadSession", JSON.stringify(data));
+		localStorage.setItem("PreSignedUrl", data.url)
+	});
+
+	var PreSignedUrl = localStorage.getItem("PreSignedUrl")
+	uploadToPreSignedUrl(PreSignedUrl, "uploads", function(result){
+		console.log(result);
+	});
+
+}
+
+function uploadToPreSignedUrl(url,data,callback){
+	$.ajax({
+	 	url: url, 
+	 	type:'PUT',
+	 	data: data+'.zip',
+	 	headers:{
+	 		'Content-Type':'text/plain;charset=UTF-8'
+	 	},
+	 	beforeSend: function(xhr) {
+		    xhr.setRequestHeader("SessionToken", localStorage.getItem("sessionToken"));
+	    },
+	 	success: function(result){
+	        callback(result)
+	    }
+	  });
+}
+
+</script>
+</html>

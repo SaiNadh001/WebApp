@@ -29,6 +29,7 @@
 			            <li class="divider"></li>
 			          </ul>
 			        </li>
+			        <li><a href="/survey_details">Surveys</a></li>
 					<li><a href="/consent_signature">Consent Signature</a></li>
 					<li><a href="/update_user_profile">Update Profile</a></li>
 					<li class="divider"></li>
@@ -39,7 +40,7 @@
 		</div>
 	</nav>
 	<div class="jumbotron container">
-	<div class="container ">
+
 		<h3 style="text-align:center;"> Studies </h3>
 		<table class="table table-striped table-hover ">
 		  <thead>
@@ -53,27 +54,7 @@
 		  <tbody class="studies">
 		  </tbody>
 		</table> 
-	</div>
-	<hr>
-	<div class="container">
-		<h3 style="text-align:center;"> Study Consents </h3>
-		<div style="float:right">
-			<button type="button" class="btn btn-primary" onclick="publish_consents()">Publish</button>
-		</div>
-		<table class="table table-striped table-hover ">
-		  <thead>
-		    <tr>
-		      <th>#</th>
-		      <th>Created On</th>
-		      <th>Active</th>		      
-		      <th>Type</th>
-		      <th></th>
-		    </tr>
-		  </thead>
-		  <tbody class="consents">
-		  </tbody>
-		</table> 
-	</div>
+
 </div>
 </body>
 <script type="text/javascript" src="../js/jquery-1.10.2.min.js"></script>
@@ -95,36 +76,59 @@ function ajax_request(url,type,data,callback){
 function getData(data){
 	console.log(data)
 }
-function getUserDetails(){
+function getStudies(){
 	ajax_request("/studies","GET","",function(data){
 		console.log(data)
 		var study=""
 		for(i=0 ; i<data.items.length ; i++){
-			console.log(data.items[0])
-			study = study + "<tr><td>"+(i+1)+"</td><td>"+data.items[0].name+"</td><td>"+data.items[0].identifier+"</td><td>"+data.items[0].type+"</td></tr>"
+			console.log(data.items[i])
+			study = study + "<tr><td>"+(i+1)+"</td><td>"+data.items[i].name+"</td><td>"+data.items[i].identifier+"</td><td>"+data.items[i].type+"</td></tr>"
 		}
 		$(".studies").append(study)
 	});
 
-	ajax_request("/consents","GET","",function(data){
-		console.log(data)
-		var study_consents=""
-		for(i=0 ; i<data.items.length ; i++){
-			console.log(data.items[0])
-			study_consents = study_consents + "<tr><td>"+(i+1)+"</td><td>"+data.items[0].createdOn+"</td><td>"+data.items[0].active+"</td><td>"+data.items[0].type+"</td> <th style='visibility:hidden;' class='publish text-success'>Published</th></tr>"
-		}
-		$(".consents").append(study_consents)
-	});
+	
 } 
 
-function publish_consents(){
-	ajax_request("/consents/published","GET","",function(data){
-		console.log(data)
-		$(".publish").css("visibility","visible")
-	});
-}
 
-getUserDetails();
+
+getStudies();
+
+var data ={ 
+	   "name":"SampleStudy",
+	   "sponsorName":"The DO Study by DreamOrbit",
+	   "identifier":"dostudy",
+	   "supportEmail":"saibaba.nadh@dreamorbit.com",
+	   "technicalEmail":"saibaba.nadh@dreamorbit.com",
+	   "consentNotificationEmail":"saibaba.nadh@dreamorbit.com",
+	   "minAgeOfConsent":18,
+	   "maxNumOfParticipants":1000,
+	   "version":9999,
+	   "passwordPolicy":{ 
+	      "minLength":8,
+	      "numericRequired":true,
+	      "symbolRequired":true,
+	      "lowerCaseRequired":true,
+	      "upperCaseRequired":true,
+	      "type":"PasswordPolicy"
+	   },
+	   "verifyEmailTemplate":{ 
+	      "subject":"Verify your account",
+	      "body":"<p>Hi,</p> \n<p>Thank you for registering for ${studyName}.</p> \n<p>This research study is powered by Bridge, a secure data storage service operated by Sage Bionetworks. In order to proceed, you must first confirm your email address by clicking the link below, or copying and pasting it into the address bar of your browser:</p> \n<p>${url}</p> \n<p>Once you confirm your email, you will be able to finish setting up your profile for the study.</p> \n<p>Regards,</p> \n<p>${sponsorName}</p> \n<p>For general inquiries or to request support with your account, please email ${supportEmail}</p>",
+	      "mimeType":"html",
+	      "type":"EmailTemplate"
+	   },
+	   "resetPasswordTemplate":{ 
+	      "subject":"${studyName} password reset",
+	      "body":"<p>Forgot your password?</p> \n<p>We've received a request to reset the password for this email address.</p> \n<p>To reset your password please click on this link or cut and paste this URL into your browser (link expires in ${expirationWindow} hours):</p> \n<p>${url}</p> \n<p>This link takes you to a secure page where you can change your password.</p> \n<p>If you don't want to reset your password, please ignore this message. Your password will not be reset.</p>\n<p>For general inquiries or to request support with your account, please email ${supportEmail}</p>",
+	      "mimeType":"html",
+	      "type":"EmailTemplate"
+	   },
+	   "userProfileAttributes":["can_recontact"],
+	   "consentHTML":"/consent.html",
+	   "consentPDF":"/consent.pdf",
+	   "type":"Study"
+	}
 
 </script>
 </html>

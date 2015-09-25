@@ -1,0 +1,89 @@
+{ 
+   "guid":"56d2b9e2-1c05-4c12-8ba0-865b13e75f05",
+   "label":"A/B Test Schedule Plan",
+   "studyKey":"doapi",
+   "version":1,
+   "modifiedOn":"2015-08-14T17:46:36.098Z",
+   "strategy":{ 
+      "type":"ABTestScheduleStrategy",
+      "scheduleGroups":[ 
+         { 
+            "percentage":40,
+            "schedule":{ 
+               "label":"Do the AAA task schedule",
+               "scheduleType":"recurring",
+               "cronTrigger":"0 0 11 ? * MON,WED,FRI *",
+               "activities":[ 
+                  { 
+                     "label":"Take the tapping test",
+                     "task":{ 
+                        "identifier":"task:AAA",
+                        "type":"TaskReference"
+                     },
+                     "activityType":"task",
+                     "type":"Activity"
+                  }
+               ],
+               "persistent":false,
+               "expires":"PT1H",
+               "times":[],
+               "type":"Schedule"
+            },
+            "type":"ScheduleGroup"
+         },
+         { 
+            "percentage":40,
+            "schedule":{ 
+               "label":"Do the BBB task schedule",
+               "scheduleType":"recurring",
+               "cronTrigger":"0 0 11 ? * MON,WED,FRI *",
+               "activities":[ 
+                  { 
+                     "label":"Take the tapping test",
+                     "task":{ 
+                        "identifier":"task:BBB",
+                        "type":"TaskReference"
+                     },
+                     "activityType":"task",
+                     "type":"Activity"
+                  }
+               ],
+               "persistent":false,
+               "expires":"PT1H",
+               "times":[],
+               "type":"Schedule"
+            },
+            "type":"ScheduleGroup"
+         },
+         { 
+            "percentage":20,
+            "schedule":{ 
+               "label":"Test label for the user",
+               "scheduleType":"recurring",
+               "cronTrigger":"0 0 11 ? * MON,WED,FRI *",
+               "activities":[ 
+                  { 
+                     "label":"Survey activity",
+                     "survey":{ 
+                        "identifier":"identifier",
+                        "guid":"GUID-AAA",
+                        "createdOn":"2015-01-27T17:46:31.237Z",
+                        "href":"http://localhost:9000/v3/surveys/GUID-AAA/revisions/2015-01-27T17:46:31.237Z",
+                        "type":"SurveyReference"
+                     },
+                     "activityType":"survey",
+                     "ref":"http://localhost:9000/v3/surveys/GUID-AAA/revisions/2015-01-27T17:46:31.237Z",
+                     "type":"Activity"
+                  }
+               ],
+               "persistent":false,
+               "expires":"PT1H",
+               "times":[],
+               "type":"Schedule"
+            },
+            "type":"ScheduleGroup"
+         }
+      ]
+   },
+   "type":"SchedulePlan"
+}

@@ -62,6 +62,7 @@
 <script src="../js/spin.min.js"></script>
 <script src="../js/ladda.min.js"></script>
 <script type="text/javascript">
+localStorage.clear()
 function ajax_request(url,type,data,callback){
 	Ladda.create($(".signin-btn")[0]).start()
  	$.ajax({
