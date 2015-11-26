@@ -85,7 +85,7 @@ function getData(data){
 function signIn(){
 	if($("#inputUsername").val() !=="" &&  $("#inputPassword").val() !=="" ){
 		ajax_request("/auth/signIn","POST",{   
-		  "study":"doapi",   
+		  "study":"testapi",   
 		  "username":$("#inputUsername").val(),    
 		  "password":$("#inputPassword").val()
 		},function(data){

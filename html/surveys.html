@@ -22,13 +22,13 @@
 				
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
-			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Study <span class="caret"></span></a>
-			          <ul class="dropdown-menu" role="menu">
-			            <li class="active"><a href="/study">Studies</a></li>
-			            <li><a href="/study_consent">Study Consents</a></li>
-			            <li class="divider"></li>
-			          </ul>
-			        </li>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Study <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li class="active"><a href="/study">Studies</a></li>
+							<li><a href="/study_consent">Study Consents</a></li>
+							<li class="divider"></li>
+						</ul>
+					</li>
 					<li><a href="/survey_details">Surveys</a></li>
 					<li><a href="/consent_signature">Consent Signature</a></li>
 					<li><a href="/update_user_profile">Update Profile</a></li>
@@ -43,36 +43,36 @@
 
 		<h3 style="text-align:center;"> Surveys </h3>
 		<table class="table table-striped table-hover ">
-		  <thead>
-		    <tr>
-		      <th>#</th>
-		      <th>Name</th>
-		      <th>Identifier</th>
-		      <th>Type</th>
-		      <th>Published</th>
-		    </tr>
-		  </thead>
-		  <tbody class="surveys">
-		  </tbody>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Identifier</th>
+					<th>Type</th>
+					<th>Published</th>
+				</tr>
+			</thead>
+			<tbody class="surveys">
+			</tbody>
 		</table> 
 
-</div>
+	</div>
 </body>
 <script type="text/javascript" src="../js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript" src="../js/bootstrap.min.js"></script>
 <script type="text/javascript">
 function ajax_request(url,type,data,callback){
- $.ajax({
- 	url: url, 
- 	type:type,
- 	data:data,
- 	beforeSend: function(xhr) {
-	    xhr.setRequestHeader("SessionToken", localStorage.getItem("sessionToken"));
-    },
- 	success: function(result){
-        callback(result)
-    }
-  });
+	$.ajax({
+		url: url, 
+		type:type,
+		data:data,
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader("SessionToken", localStorage.getItem("sessionToken"));
+		},
+		success: function(result){
+			callback(result)
+		}
+	});
 }
 function getData(data){
 	console.log(data)
@@ -97,8 +97,8 @@ function getSurveys(){
 getSurveys();
 
 var data ={ 
-	 
-	}
+	
+}
 
 </script>
 </html>
